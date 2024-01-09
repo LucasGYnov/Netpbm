@@ -15,11 +15,29 @@ type PBM struct {
 
 func main() {
 	var file string
-
 	fmt.Print("Entrer le nom du document (attention à ne pas faire d'erreur) : ")
 	fmt.Scanf("%s", &file)
+	pbm, err := ReadPBM(file)
+	if err != nil {
+		fmt.Println("Erreur lors de la lecture du fichier:", err)
+		return
+	}
 
-	ReadPBM(file)
+	pbm.Size()
+
+	pbm.At(21, 3)
+
+	pbm.Set(2, 3, true)
+	fmt.Printf("Initialisation à l'indince (21, 3): %t\n", pbm.At(21, 3))
+
+	pbm.Invert()
+	pbm.Save("invertePBM.pbm")
+
+	pbm.Flip()
+	pbm.Save("flippedPBM.pbm")
+
+	pbm.Flop()
+	pbm.Save("floppedPBM.pbm")
 }
 
 func ReadPBM(filename string) (*PBM, error) {
@@ -91,29 +109,60 @@ func ReadPBM(filename string) (*PBM, error) {
 }
 
 func (pbm *PBM) Size() (int, int) {
-	// ...
+	fmt.Printf("Taille de l'image: %d x %d\n", pbm.width, pbm.height)
+	return pbm.width, pbm.height
 }
 
 func (pbm *PBM) At(x, y int) bool {
-	// ...
+	fmt.Printf("La valeur à l'indice %d, %d: %t \n", pbm.data[y], pbm.data[x], pbm.data[y][x])
+	return pbm.data[y][x]
 }
 
 func (pbm *PBM) Set(x, y int, value bool) {
-	// ...
+	pbm.data[y][x] = value
 }
 
 func (pbm *PBM) Save(filename string) error {
-	// ...
+	file, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	fmt.Fprintf(file, "%s\n%d %d\n", pbm.magicNumber, pbm.width, pbm.height)
+
+	for _, row := range pbm.data {
+		for _, value := range row {
+			if value {
+				fmt.Fprint(file, "1 ")
+			} else {
+				fmt.Fprint(file, "0 ")
+			}
+		}
+		fmt.Fprintln(file)
+	}
+
+	return nil
 }
 
 func (pbm *PBM) Invert() {
-	// ...
+	for i := 0; i < pbm.height; i++ {
+		for j := 0; j < pbm.width; j++ {
+			pbm.data[i][j] = !pbm.data[i][j]
+		}
+	}
 }
 
 func (pbm *PBM) Flip() {
-	// ...
+	for i := 0; i < pbm.height/2; i++ {
+		pbm.data[i], pbm.data[pbm.height-i-1] = pbm.data[pbm.height-i-1], pbm.data[i]
+	}
 }
 
 func (pbm *PBM) Flop() {
-	// ...
+	for i := 0; i < pbm.height; i++ {
+		for j := 0; j < pbm.width/2; j++ {
+			pbm.data[i][j], pbm.data[i][pbm.width-j-1] = pbm.data[i][pbm.width-j-1], pbm.data[i][j]
+		}
+	}
 }
