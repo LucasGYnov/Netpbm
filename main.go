@@ -89,3 +89,31 @@ func ReadPBM(filename string) (*PBM, error) {
 		return nil, fmt.Errorf("Le format de l'image n'est pas PBM.")
 	}
 }
+
+func (pbm *PBM) Size() (int, int) {
+	// ...
+}
+
+func (pbm *PBM) At(x, y int) bool {
+	// ...
+}
+
+func (pbm *PBM) Set(x, y int, value bool) {
+	// ...
+}
+
+func (pbm *PBM) Save(filename string) error {
+	// ...
+}
+
+func (pbm *PBM) Invert() {
+	// ...
+}
+
+func (pbm *PBM) Flip() {
+	// ...
+}
+
+func (pbm *PBM) Flop() {
+	// ...
+}
