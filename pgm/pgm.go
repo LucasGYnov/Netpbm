@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -26,7 +27,7 @@ func main() {
 
 	pgm.Size()
 
-	fmt.Printf("Valeur à l'indice (3, 3): %d\n", pgm.At(4, 4))
+	/* fmt.Printf("Valeur à l'indice (3, 3): %d\n", pgm.At(4, 4))
 
 	pgm.Set(3, 3, 11)
 	fmt.Printf("Nouvelle valeur à l'indice (3, 3): %d\n", pgm.At(3, 3))
@@ -40,7 +41,7 @@ func main() {
 	pgm.Save("flipPGM.pbm")
 
 	pgm.Flop()
-	pgm.Save("flopPGM.pbm")
+	pgm.Save("flopPGM.pbm") */
 
 	pgm.SetMaxValue(20)
 	pgm.Save("maxValuePGM.pbm")
@@ -179,15 +180,17 @@ func (pgm *PGM) Flop() {
 	}
 }
 
-func (pgm *PGM) SetMaxValue(maxValue uint) {
+func (pgm *PGM) SetMaxValue(maxValue int) {
 	if maxValue <= 255 {
-		pgm.max = int(maxValue)
+		multiplicator := float64(maxValue) / float64(pgm.max)
+		pgm.max = maxValue
+
 		for i := 0; i < pgm.height; i++ {
 			for j := 0; j < pgm.width; j++ {
-				pgm.data[i][j] = pgm.data[i][j] * uint8(pgm.max) / 255
+				pgm.data[i][j] = uint8(math.Round(float64(pgm.data[i][j]) * multiplicator))
 			}
 		}
 	} else {
-		fmt.Println("Error: Max value should be less than or equal to 255.")
+		fmt.Println("Erreur, le maximum doit être inférieur ou égal à 255.")
 	}
 }
