@@ -25,10 +25,11 @@ func main() {
 
 	pbm.Size()
 
-	pbm.At(21, 3)
+	/* pbm.At(3, 3)
+	fmt.Printf("Valeur à l'indice (3, 3): %t\n", pbm.At(3, 3))
 
-	pbm.Set(2, 3, true)
-	fmt.Printf("Initialisation à l'indince (21, 3): %t\n", pbm.At(21, 3))
+	pbm.Set(3, 3, true)
+	fmt.Printf("Nouvelle valeur à l'indice (3, 3): %t\n", pbm.At(3, 3))
 
 	pbm.Invert()
 	pbm.Save("invertePBM.pbm")
@@ -38,6 +39,9 @@ func main() {
 
 	pbm.Flop()
 	pbm.Save("floppedPBM.pbm")
+	*/
+	/* pbm.SetMagicNumber("P4")
+	pbm.Save("changedMagicNumberPBM.pbm") */
 }
 
 func ReadPBM(filename string) (*PBM, error) {
@@ -114,7 +118,6 @@ func (pbm *PBM) Size() (int, int) {
 }
 
 func (pbm *PBM) At(x, y int) bool {
-	fmt.Printf("La valeur à l'indice %d, %d: %t \n", pbm.data[y], pbm.data[x], pbm.data[y][x])
 	return pbm.data[y][x]
 }
 
@@ -166,3 +169,7 @@ func (pbm *PBM) Flop() {
 		}
 	}
 }
+
+/* func (pbm *PBM) SetMagicNumber(magicNumber string) error {
+
+} */
