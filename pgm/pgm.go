@@ -43,8 +43,11 @@ func main() {
 	pgm.Flop()
 	pgm.Save("flopPGM.pbm") */
 
-	pgm.SetMaxValue(20)
-	pgm.Save("maxValuePGM.pbm")
+	/* pgm.SetMaxValue(200) */
+	/* pgm.Save("maxValuePGM.pbm") */
+
+	pgm.Rotate90CW()
+	pgm.Save("90PGM.pbm")
 
 }
 
@@ -102,7 +105,9 @@ func ReadPGM(filename string) (*PGM, error) {
 		fmt.Println("Data:")
 		for _, row := range pgm.data {
 			for _, value := range row {
-				if value < 10 {
+				if value >= 100 {
+					fmt.Printf("%d ", value)
+				} else if value <= 10 {
 					fmt.Printf("%d  ", value)
 				} else {
 					fmt.Printf("%d ", value)
@@ -146,10 +151,12 @@ func (pgm *PGM) Save(filename string) error {
 
 	for _, row := range pgm.data {
 		for _, value := range row {
-			if value < 10 {
-				fmt.Fprint(file, value, "  ")
-			} else {
+			if value >= 100 {
 				fmt.Fprint(file, value, " ")
+			} else if value <= 10 {
+				fmt.Fprint(file, value, "   ")
+			} else {
+				fmt.Fprint(file, value, "  ")
 			}
 		}
 		fmt.Fprintln(file)
@@ -193,4 +200,24 @@ func (pgm *PGM) SetMaxValue(maxValue int) {
 	} else {
 		fmt.Println("Erreur, le maximum doit être inférieur ou égal à 255.")
 	}
+}
+
+/* func (pgm *PGM) Rotate90CW() {
+	pgm.width, pgm.height = pgm.height, pgm.width
+} */
+
+func (pgm *PGM) Rotate90CW() {
+	newData := make([][]uint8, pgm.height)
+	for i := range newData {
+		newData[i] = make([]uint8, pgm.width)
+	}
+
+	for i := 0; i < pgm.height; i++ {
+		for j := 0; j < pgm.width; j++ {
+			newData[i][j] = pgm.data[pgm.height-j-1][i]
+		}
+	}
+
+	pgm.width, pgm.height = pgm.height, pgm.width
+	pgm.data = newData
 }
