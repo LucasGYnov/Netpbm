@@ -33,13 +33,13 @@ func main() {
 
 	pbm.Invert()
 	pbm.Save("invertePBM.pbm")
-
+	*/
 	pbm.Flip()
 	pbm.Save("flippedPBM.pbm")
 
 	pbm.Flop()
 	pbm.Save("floppedPBM.pbm")
-	*/
+
 	/* pbm.SetMagicNumber("P4")
 	pbm.Save("changedMagicNumberPBM.pbm") */
 }
