@@ -16,38 +16,40 @@ type PGM struct {
 }
 
 func main() {
-	var file string
-	fmt.Print("Entrer le nom du document (attention à ne pas faire d'erreur) : ")
-	fmt.Scanf("%s", &file)
-	pgm, err := ReadPGM(file)
+	/*var file string
+	 fmt.Print("Entrer le nom du document (attention à ne pas faire d'erreur) : ")
+	fmt.Scanf("%s", &file) */
+	pgm, err := ReadPGM("test.pbm")
 	if err != nil {
 		fmt.Println("Erreur lors de la lecture du fichier:", err)
 		return
 	}
 
-	pgm.Size()
+	/* pgm.Size()
+	fmt.Println(pgm.Size()) */
 
-	/* fmt.Printf("Valeur à l'indice (3, 3): %d\n", pgm.At(4, 4))
+	/* fmt.Printf("Valeur à l'indice (4, 4): %d\n", pgm.At(4, 4)) */
 
-	pgm.Set(3, 3, 11)
+	/* pgm.Set(3, 3, 11)
 	fmt.Printf("Nouvelle valeur à l'indice (3, 3): %d\n", pgm.At(3, 3))
+	pgm.Save("change.pgm") */
 
-	pgm.Save("savePGM.pbm")
+	/* pgm.Save("savePGM.pbm") */
 
-	pgm.Invert()
-	pgm.Save("invertPGM.pbm")
+	/* pgm.Invert()
+	pgm.Save("invertPGM.pbm") */
 
-	pgm.Flip()
-	pgm.Save("flipPGM.pbm")
+	/* pgm.Flip()
+	pgm.Save("flipPGM.pbm") */
 
-	pgm.Flop()
+	/* pgm.Flop()
 	pgm.Save("flopPGM.pbm") */
 
-	/* pgm.SetMaxValue(200) */
-	/* pgm.Save("maxValuePGM.pbm") */
+	pgm.SetMaxValue(5)
+	pgm.Save("maxValuePGM.pbm")
 
-	pgm.Rotate90CW()
-	pgm.Save("90PGM.pbm")
+	/* pgm.Rotate90CW()
+	pgm.Save("90PGM.pbm") */
 
 }
 
@@ -102,25 +104,6 @@ func ReadPGM(filename string) (*PGM, error) {
 			}
 		}
 
-		fmt.Println("Data:")
-		for _, row := range pgm.data {
-			for _, value := range row {
-				if value >= 100 {
-					fmt.Printf("%d ", value)
-				} else if value <= 10 {
-					fmt.Printf("%d  ", value)
-				} else {
-					fmt.Printf("%d ", value)
-				}
-			}
-			fmt.Println()
-		}
-
-		fmt.Printf("Width: %d, ", pgm.width)
-		fmt.Printf("Height: %d\n", pgm.height)
-		fmt.Printf("Magic Number: %s\n", pgm.magicNumber)
-		fmt.Printf("Max: %d\n", pgm.max)
-
 		return pgm, nil
 	} else {
 		return nil, fmt.Errorf("Le format de l'image n'est pas PGM.")
@@ -128,7 +111,6 @@ func ReadPGM(filename string) (*PGM, error) {
 }
 
 func (pgm *PGM) Size() (int, int) {
-	fmt.Printf("Taille de l'image: %d x %d\n", pgm.width, pgm.height)
 	return pgm.width, pgm.height
 }
 
@@ -187,34 +169,31 @@ func (pgm *PGM) Flop() {
 	}
 }
 
-func (pgm *PGM) SetMaxValue(maxValue int) {
-	if maxValue <= 255 {
-		multiplicator := float64(maxValue) / float64(pgm.max)
-		pgm.max = maxValue
+func (pgm *PGM) SetMagicNumber(magicNumber string) {
+	pgm.magicNumber = magicNumber
+}
 
-		for i := 0; i < pgm.height; i++ {
+func (pgm *PGM) SetMaxValue(maxValue int) {
+	if maxValue >= 1 && maxValue <= 255 { // On vérifie que maxValue soit compris entre 1 et 255 inclus
+		pgm.max = int(maxValue)
+
+		for i := 0; i < pgm.height; i++ { // On parcours la matrice
 			for j := 0; j < pgm.width; j++ {
-				pgm.data[i][j] = uint8(math.Round(float64(pgm.data[i][j]) * multiplicator))
+				pgm.data[i][j] = uint8(math.Round(float64(pgm.data[i][j]) / float64(pgm.max) * 255)) // Chaque valeur de data est modifié selon le coefficient multiplicateur de maxValue
 			}
 		}
-	} else {
-		fmt.Println("Erreur, le maximum doit être inférieur ou égal à 255.")
 	}
 }
 
-/* func (pgm *PGM) Rotate90CW() {
-	pgm.width, pgm.height = pgm.height, pgm.width
-} */
-
 func (pgm *PGM) Rotate90CW() {
-	newData := make([][]uint8, pgm.height)
+	newData := make([][]uint8, pgm.width)
 	for i := range newData {
-		newData[i] = make([]uint8, pgm.width)
+		newData[i] = make([]uint8, pgm.height)
 	}
 
 	for i := 0; i < pgm.height; i++ {
 		for j := 0; j < pgm.width; j++ {
-			newData[i][j] = pgm.data[pgm.height-j-1][i]
+			newData[j][pgm.height-i-1] = pgm.data[i][j]
 		}
 	}
 

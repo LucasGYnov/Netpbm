@@ -12,6 +12,10 @@ type Pixel struct {
 	R, G, B uint8
 }
 
+type Point struct {
+	X, Y int
+}
+
 type PPM struct {
 	data          [][]Pixel
 	width, height int
@@ -20,39 +24,53 @@ type PPM struct {
 }
 
 func main() {
-	var file string
-	fmt.Print("Entrer le nom du document (attention à ne pas faire d'erreur) : ")
-	fmt.Scanf("%s", &file)
-
-	ppm, err := ReadPPM(file)
+	/*var file string
+	 fmt.Print("Entrer le nom du document (attention à ne pas faire d'erreur) : ")
+	fmt.Scanf("%s", &file) */
+	ppm, err := ReadPPM("test.pbm")
 	if err != nil {
 		fmt.Println("Erreur lors de la lecture du fichier:", err)
 		return
 	}
 
-	ppm.Size()
+	/* ppm.Size()
+	fmt.Println(ppm.Size()) */
 
-	pixelValue := ppm.At(2, 2)
-	fmt.Printf("Valeur du pixel à l'indice (2, 2): (%d, %d, %d)\n", pixelValue.R, pixelValue.G, pixelValue.B)
+	/* pixelValue := ppm.At(2, 2)
+	fmt.Printf("Valeur du pixel à l'indice (2, 2): (%d, %d, %d)\n", pixelValue.R, pixelValue.G, pixelValue.B) */
 
-	newPixelValue := Pixel{R: 100, G: 150, B: 200}
+	/* newPixelValue := Pixel{R: 100, G: 150, B: 200}
 	ppm.Set(2, 2, newPixelValue)
 	fmt.Printf("Nouvelle valeur du pixel à l'indice (2, 2): (%d, %d, %d)\n", newPixelValue.R, newPixelValue.G, newPixelValue.B)
+	ppm.Save("change.ppm") */
 
-	ppm.Invert()
-	ppm.Save("invertPPM.ppm")
+	/* ppm.Invert()
+	ppm.Save("invertPPM.ppm") */
 
-	ppm.Flip()
-	ppm.Save("flipPPM.ppm")
+	/* ppm.Flip()
+	ppm.Save("flipPPM.ppm") */
 
-	ppm.Flop()
-	ppm.Save("flopPPM.ppm")
+	/* ppm.Flop()
+	ppm.Save("flopPPM.ppm") */
 
-	ppm.SetMaxValue(200)
+	/* ppm.SetMaxValue(10)
 	ppm.Save("maxValuePPM.ppm")
+	*/
+	/* ppm.SetMagicNumber("P6")
+	ppm.Save("maxvaluechange.ppm") */
 
-	ppm.Rotate90CW()
-	ppm.Save("90PPM.ppm")
+	/* ppm.Rotate90CW()
+	ppm.Save("90PPM.ppm") */
+
+	/* ppm.DrawLine(Point{0, 0}, Point{0, 5}, Pixel{R: 255, G: 0, B: 0})
+	ppm.Save("drawLine.ppm") */
+
+	ppm.DrawRectangle(Point{2, 2}, 4, 3, Pixel{R: 0, G: 255, B: 0})
+	ppm.Save("drawRectangle.ppm")
+
+	ppm.DrawFilledRectangle(Point{8, 2}, 3, 4, Pixel{R: 0, G: 0, B: 255})
+
+	ppm.Save("drawFRectangle.ppm")
 }
 
 func ReadPPM(filename string) (*PPM, error) {
@@ -105,18 +123,18 @@ func ReadPPM(filename string) (*PPM, error) {
 			}
 		}
 
-		fmt.Println("Data:")
+		/* fmt.Println("Data:")
 		for _, row := range ppm.data {
 			for _, pixel := range row {
 				fmt.Printf("(%d, %d, %d) ", pixel.R, pixel.G, pixel.B)
 			}
 			fmt.Println()
-		}
+		} */
 
-		fmt.Printf("Width: %d, ", ppm.width)
+		/* fmt.Printf("Width: %d, ", ppm.width)
 		fmt.Printf("Height: %d\n", ppm.height)
 		fmt.Printf("Magic Number: %s\n", ppm.magicNumber)
-		fmt.Printf("Max: %d\n", ppm.max)
+		fmt.Printf("Max: %d\n", ppm.max) */
 
 		return ppm, nil
 	} else {
@@ -179,20 +197,24 @@ func (ppm *PPM) Flop() {
 	}
 }
 
-func (ppm *PPM) SetMaxValue(maxValue int) {
-	if maxValue <= 255 {
+func (ppm *PPM) SetMagicNumber(magicNumber string) {
+	ppm.magicNumber = magicNumber
+}
+
+func (ppm *PPM) SetMaxValue(maxValue uint8) {
+	if maxValue <= 255 || maxValue >= 1 {
 		multiplicator := float64(maxValue) / float64(ppm.max)
-		ppm.max = maxValue
+		ppm.max = int(maxValue)
 
 		for i := 0; i < ppm.height; i++ {
 			for j := 0; j < ppm.width; j++ {
-				ppm.data[i][j].R = uint8(math.Round(float64(ppm.data[i][j].R) * multiplicator))
-				ppm.data[i][j].G = uint8(math.Round(float64(ppm.data[i][j].G) * multiplicator))
-				ppm.data[i][j].B = uint8(math.Round(float64(ppm.data[i][j].B) * multiplicator))
+				ppm.data[i][j].R = uint8(math.Round(float64(ppm.data[i][j].R) * float64(multiplicator)))
+				ppm.data[i][j].G = uint8(math.Round(float64(ppm.data[i][j].G) * float64(multiplicator)))
+				ppm.data[i][j].B = uint8(math.Round(float64(ppm.data[i][j].B) * float64(multiplicator)))
 			}
 		}
 	} else {
-		fmt.Println("Erreur, le maximum doit être inférieur ou égal à 255.")
+		fmt.Println("Erreur, le maximum doit être différent de zéro.")
 	}
 }
 
@@ -210,4 +232,56 @@ func (ppm *PPM) Rotate90CW() {
 
 	ppm.width, ppm.height = ppm.height, ppm.width
 	ppm.data = newData
+}
+
+func (ppm *PPM) DrawLine(p1, p2 Point, color Pixel) {
+	//...
+}
+
+func (ppm *PPM) DrawRectangle(p1 Point, width, height int, color Pixel) {
+	p2 := Point{X: p1.X + width - 1, Y: p1.Y}
+	p3 := Point{X: p1.X, Y: p1.Y + height - 1}
+	p4 := Point{X: p1.X + width - 1, Y: p1.Y + height - 1}
+
+	ppm.DrawLine(p1, p2, color)
+	ppm.DrawLine(p2, p4, color)
+	ppm.DrawLine(p4, p3, color)
+	ppm.DrawLine(p3, p1, color)
+}
+
+func (ppm *PPM) DrawFilledRectangle(p1 Point, width, height int, color Pixel) {
+	for i := 0; i < height; i++ {
+		for j := 0; j < width; j++ {
+			ppm.Set(p1.X+j, p1.Y+i, color)
+		}
+	}
+}
+
+func (ppm *PPM) DrawCircle(center Point, radius int, color Pixel) {
+	// ...
+}
+
+// DrawFilledCircle draws a filled circle in the PPM image.
+func (ppm *PPM) DrawFilledCircle(center Point, radius int, color Pixel) {
+	// ...
+}
+
+// DrawTriangle draws a triangle in the PPM image.
+func (ppm *PPM) DrawTriangle(p1, p2, p3 Point, color Pixel) {
+	// ...
+}
+
+// DrawFilledTriangle draws a filled triangle in the PPM image.
+func (ppm *PPM) DrawFilledTriangle(p1, p2, p3 Point, color Pixel) {
+	// ...
+}
+
+// DrawPolygon draws a polygon in the PPM image.
+func (ppm *PPM) DrawPolygon(points []Point, color Pixel) {
+	// ...
+}
+
+// DrawFilledPolygon draws a filled polygon in the PPM image.
+func (ppm *PPM) DrawFilledPolygon(points []Point, color Pixel) {
+	// ...
 }
