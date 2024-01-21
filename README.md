@@ -13,9 +13,7 @@ ___
 >- [x] Flop()
 >- [x] SetMagicNumber()
 >
->Et elles ont passé les tests (ici toutes) :
-> ![pbm.go Test](/imagePassageTest/pbm.go_test.png)
-****
+
 ## pgm.go
 ___
 >[!info] Information sur le programme
@@ -32,9 +30,7 @@ ___
 >- [x] Rotate90CW()
 >- [x] ToPBM()
 >      
->  Et elles ont passé les tests (ici toutes) :
-> ![pgm.go Test](/imagePassageTest/pgm.go_test.png)
-****
+
 ## ppm.go
 ___
 >[!info] Information sur le programme
@@ -65,6 +61,3 @@ ___
 >- [ ] DrawPerlinNoise()
 >- [ ] KNearestNeighbors()
 >      
->Et elles ont passé les tests (ici toutes les fonctions présente dans le testeur) :
-> ![ppm.go Test](/imagePassageTest/ppm.go_test.png)
-****
