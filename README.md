@@ -34,7 +34,7 @@ ___
 >      
 >  Et elles ont passé les tests (ici toutes) :
 > ![pgm.go Test](/imagePassageTest/pgm.go_test.png)
-
+****
 ## ppm.go
 ___
 >[!info] Information sur le programme
@@ -67,3 +67,4 @@ ___
 >      
 >Et elles ont passé les tests (ici toutes les fonctions présente dans le testeur) :
 > ![ppm.go Test](/imagePassageTest/ppm.go_test.png)
+****
