@@ -14,7 +14,7 @@ ___
 >- [x] SetMagicNumber()
 >
 >Et elles ont passé les tests (ici toutes) :
-> ![pbm.go Test](imagePassageTest\pbm.go_test.png)
+> ![pbm.go Test](/imagePassageTest/pbm.go_test.png)
 ****
 ## pgm.go
 ___
@@ -33,7 +33,7 @@ ___
 >- [x] ToPBM()
 >      
 >  Et elles ont passé les tests (ici toutes) :
-> ![pgm.go Test](imagePassageTest\pgm.go_test.png)
+> ![pgm.go Test](/imagePassageTest\pgm.go_test.png)
 
 ## ppm.go
 ___
@@ -66,4 +66,4 @@ ___
 >- [ ] KNearestNeighbors()
 >      
 >Et elles ont passé les tests (ici toutes les fonctions présente dans le testeur) :
-> ![ppm.go Test](imagePassageTest\ppm.go_test.png)
+> ![ppm.go Test](/imagePassageTest\ppm.go_test.png)
